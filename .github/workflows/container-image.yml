@@ -25,8 +25,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker Image
-        run: docker build -t charmingruby/hextech:${{ steps.generate_tag.outputs.sha }} .
-
-      - name: Push Docker Image
-        run: docker push charmingruby/hextech:${{ steps.generate_tag.outputs.sha }}
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: charmingruby/hextech:${{ steps.generate_tag.outputs.sha }},charmingruby/hextech:latest
