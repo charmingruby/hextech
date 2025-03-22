@@ -21,9 +21,9 @@ resource "aws_iam_role" "ecr_role" {
       {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRoleWithWebIdentity",
-        "Principal" : {
-          "Federated" : "arn:aws:iam::035330831945:oidc-provider/token.actions.githubusercontent.com"
-        },
+        Principal = {
+          Federated = "arn:aws:iam::035330831945:oidc-provider/token.actions.githubusercontent.com"
+        }
         "Condition" : {
           "StringEquals" : {
             "token.actions.githubusercontent.com:aud" : [

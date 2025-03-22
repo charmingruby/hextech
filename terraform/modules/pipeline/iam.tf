@@ -6,7 +6,7 @@ resource "aws_iam_role" "this" {
       {
         Effect = "Allow"
         Principal = {
-          Federated = "arn:aws:iam::403429280851:oidc-provider/token.actions.githubusercontent.com"
+          Federated = "arn:aws:iam::035330831945:oidc-provider/token.actions.githubusercontent.com"
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
