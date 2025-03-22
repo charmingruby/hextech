@@ -1,0 +1,57 @@
+name: Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: Terraform Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{secrets.PIPELINE_ROLE_ASSUME}}
+          aws-region: ${{secrets.AWS_REGION}}
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.4
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform format
+        run: terraform fmt -check
+        working-directory: ./terraform
+
+      - name: Terraform plan
+        env:
+          TF_VAR_project: ${{ vars.TERRAFORM_PROJECT_TAG }}
+          TF_VAR_department: ${{ vars.TERRAFORM_DEPARTMENT_TAG }}
+          TF_VAR_environment: ${{ vars.TERRAFORM_ENVIRONMENT_TAG }}
+          TF_VAR_managed_by: ${{ vars.TERRAFORM_MANAGED_BY_TAG }}
+          TF_VAR_created_at: ${{ vars.TERRAFORM_CREATED_AT_TAG }}
+        run: terraform plan
+        working-directory: ./terraform
+
+      - name: Terraform apply
+        env:
+          TF_VAR_project: ${{ vars.TERRAFORM_PROJECT_TAG }}
+          TF_VAR_department: ${{ vars.TERRAFORM_DEPARTMENT_TAG }}
+          TF_VAR_environment: ${{ vars.TERRAFORM_ENVIRONMENT_TAG }}
+          TF_VAR_managed_by: ${{ vars.TERRAFORM_MANAGED_BY_TAG }}
+          TF_VAR_created_at: ${{ vars.TERRAFORM_CREATED_AT_TAG }}
+        run: terraform apply -auto-approve
+        working-directory: ./terraform

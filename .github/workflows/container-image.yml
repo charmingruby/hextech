@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: GenerateTag
         id: generate_tag
@@ -26,8 +26,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: 'arn:aws:iam::035330831945:role/ecr_role'
-          aws-region: us-east-1
+          role-to-assume: ${{secrets.ECR_ROLE_ASSUME}}
+          aws-region: ${{secrets.AWS_REGION}}
 
       - name: Login to AWS ECR
         id: login-ecr
@@ -39,6 +39,5 @@ jobs:
           TAG: ${{ steps.generate_tag.outputs.sha }}
         run: |
           docker build -t $REGISTRY/hextech:$TAG .
-          docker push $REGISTRY/hextech:$TAG
           docker tag $REGISTRY/hextech:$TAG $REGISTRY/hextech:latest
-          docker push $REGISTRY/hextech:latest
+          docker push --all-tags $REGISTRY/hextech
