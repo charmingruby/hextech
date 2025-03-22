@@ -40,3 +40,5 @@ jobs:
         run: |
           docker build -t $REGISTRY/hextech:$TAG .
           docker push $REGISTRY/hextech:$TAG
+          docker tag $REGISTRY/hextech:$TAG $REGISTRY/hextech:latest
+          docker push $REGISTRY/hextech:$TAG
