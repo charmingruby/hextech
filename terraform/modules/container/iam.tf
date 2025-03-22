@@ -38,6 +38,30 @@ resource "aws_iam_role" "ecr_role" {
     ]
   })
 
+  inline_policy {
+    name = "ecr-app-permission"
+    policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "AllowPushPull",
+          "Effect" : "Allow",
+          "Action" : [
+            "ecr:GetAuthorizationToken",
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:UploadLayerPart",
+            "ecr:InitiateLayerUpload",
+            "ecr:CompleteLayerUpload",
+            "ecr:PutImage",
+            "ecr:BatchGetImage"
+          ],
+          "Resource" : "*"
+        }
+      ]
+    })
+  }
+
   tags = merge(var.tags, {
     "Name" = "ecr_role"
   })
