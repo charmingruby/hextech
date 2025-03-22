@@ -3,7 +3,7 @@ locals {
     project     = var.project
     department  = var.department
     environment = var.environment
-    managed-by  = var.managed-by
-    created-at  = var.created-at
+    managed_by  = var.managed_by
+    created_at  = var.created_at
   }
 }

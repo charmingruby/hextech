@@ -14,13 +14,13 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "managed-by" {
+variable "managed_by" {
   description = "The project name"
   type        = string
   default     = "Terraform"
 }
 
-variable "created-at" {
+variable "created_at" {
   description = "The project name"
   type        = string
 }
